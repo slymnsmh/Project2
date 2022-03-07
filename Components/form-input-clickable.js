@@ -1,18 +1,15 @@
 import React, { Component } from "react";
-import { Dimensions, TextInput, View } from "react-native";
+import { Dimensions, TextInput, TouchableOpacity, View } from "react-native";
 
-export default class FormInput extends Component {
+export default class FormInputClickable extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-      <View
-        onPress={() => {
-          Keyboard.dismiss();
-        }}
-        activeOpacity={5}
+      <TouchableOpacity
+        onPress={this.props.onpress}
         style={{
           width: this.props.width,
           height: this.props.height,
@@ -24,13 +21,16 @@ export default class FormInput extends Component {
         }}
       >
         <TextInput
+          editable={false}
+          selectTextOnFocus={false}
+          pointerEvents="none"
           placeholder={this.props.placeholder}
           placeholderTextColor="rgb(157,140,76)"
           style={{ width: "100%", color: "white", fontWeight: "bold" }}
-          onChangeText={this.props.onchange}
+          onChangeText={() => this.props.onchange}
           value={this.props.value}
         />
-      </View>
+      </TouchableOpacity>
     );
   }
 }
