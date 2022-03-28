@@ -11,6 +11,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from "react-native";
 import FormButton from "../Components/form-button";
 import FormInput from "../Components/form-input";
@@ -23,6 +24,71 @@ const inputWidth = Dimensions.get("window").width * 0.9;
 const inputHeight = Dimensions.get("window").height * 0.06;
 const today = new Date();
 let datePicked = null;
+
+const styles = StyleSheet.create({
+  container: {
+      flex: 1,
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "center",
+  },
+  loginBtn: {
+      width: "50%",
+      borderRadius: 25,
+      height: 50,
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 40,
+      backgroundColor: "#32a8a8",
+  },
+  aralik: {
+    flex: 0.2,
+    flexDirection: 'row',
+  },
+  inputView: {
+      backgroundColor: "#d3e0e0",
+      borderRadius: 30,
+      width: "70%",
+      height: 30,
+      marginBottom: 20,
+      alignItems: "center",
+      alignItems: "center",
+      justifyContent: "center",
+      textAlign: 'center',
+  },
+  name: {
+    fontSize: 22,
+    color: '#FFFFFF',
+    fontWeight: '600',
+    
+  },
+  nextButtonLeft: {
+    flex: 0.3,
+    width: '50%',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 10,
+    marginRight: 50,
+    backgroundColor: '#fc8403',
+  },
+  nextButtonRight: {
+    flex: 0.3,
+    width: '50%',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 50,
+    marginRight: 10,
+    backgroundColor: '#fc8403',
+  },
+});
 
 const cities = [
   { id: 1, title: "Ankara" },
@@ -63,6 +129,7 @@ export default class HomeScreen extends Component {
       month:"",
       year:"",
       pcr_positive: "",
+      formState: "first",
       showVaccineTypeModal: false,
       showSideEffectModal: false,
       showDatePicker: false,
@@ -84,8 +151,51 @@ export default class HomeScreen extends Component {
     }
   }
 
-  submitSurvey = () =>
-  {   
+  resetApp =  () => {
+    this.setState({
+      name: "",
+      surname: "",
+      birth_date: "",
+      birth_date_name: "",
+      city: "",
+      gender: "",
+      vaccine_type: "",
+      side_effect: "",
+      day:"",
+      month:"",
+      year:"",
+      pcr_positive: "",
+      formState: "first",
+      showVaccineTypeModal: false,
+      showSideEffectModal: false,
+      showDatePicker: false,
+      allDone: false,
+      showCityPicker: false,
+      showGenderPicker: false,
+      showPCRPositiveModal: false,
+    });
+  };
+
+  changeAnswer =  () => {
+    this.setState({
+      formState: "first",
+      showVaccineTypeModal: false,
+      showSideEffectModal: false,
+      showDatePicker: false,
+      allDone: false,
+      showCityPicker: false,
+      showGenderPicker: false,
+      showPCRPositiveModal: false,
+    });
+  };
+
+  thankYou =() =>{
+    alert("Thank you for your participation");
+    this.resetApp();
+  }
+
+  submitSurvey =  async() =>
+{   
       if( this.state.name == "" || this.state.surname == "" || this.state.birth_date_name =="" || this.state.city == "" || this.state.gender == "" || this.state.vaccine_type == "" ||this.state.side_effect == "" || this.state.pcr_positive == "")
       {
         alert("All fields must be filled");    
@@ -93,14 +203,14 @@ export default class HomeScreen extends Component {
       else{
         if( this.validateName())
         {
-          alert("Your answer were submitted.");
+          this.setState({formState:"second"});
         }
         else{
           alert("Invalid name or surname");
         }
       }
       
-  }
+  };
 
   async componentDidMount() {
     this._isMounted = true;
@@ -142,8 +252,10 @@ export default class HomeScreen extends Component {
 
   render() {
     Moment.locale("en");
-    return (
-      <TouchableOpacity
+    if( this.state.formState =='first')
+    {
+      return (
+        <TouchableOpacity
         onPress={() => {
           Keyboard.dismiss();
         }}
@@ -211,11 +323,10 @@ export default class HomeScreen extends Component {
                   placeholder="Name"
                   value={this.state.name}
                   onchange={(value) => {
-                    this._isMounted && this.setState({ 
-                      name: value,
-                      allDone: value != "" && this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" &&  this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "", 
-                    });
+                    this._isMounted && this.setState({ name: value,
+                      allDone: value != "" && this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" &&  this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "", });
                   }}
+                  accessibilityLabel="name"
                 />
                 <FormInput
                   width={inputWidth}
@@ -223,10 +334,8 @@ export default class HomeScreen extends Component {
                   placeholder="Surname"
                   value={this.state.surname}
                   onchange={(value) => {
-                    this._isMounted && this.setState({ 
-                      allDone: value != "" && this.state.birth_date_name != "" && this.state.city != "" &&  this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "",
-                      surname: value 
-                    });
+                    this._isMounted && this.setState({ surname: value,
+                      allDone: value != "" && this.state.birth_date_name != "" && this.state.city != "" &&  this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "", });
                   }}
                 />
                 <FormInputClickable
@@ -236,7 +345,7 @@ export default class HomeScreen extends Component {
                   onpress={() => {
                     this._isMounted && this.setState({ showDatePicker: true });
                   }}
-                  value={ this.state.birth_date_name}
+                  value={ this.state.birth_date_name} 
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -298,9 +407,9 @@ export default class HomeScreen extends Component {
                 justifyContent: "space-evenly",
               }}
             >
-              {this.state.allDone && 
+            { this.state.allDone &&
               <TouchableOpacity
-    
+                
                 style={{
                   width: inputWidth * 0.7,
                   height: inputHeight * 1.1,
@@ -323,7 +432,7 @@ export default class HomeScreen extends Component {
                 >
                   Submit
                 </Text>
-              </TouchableOpacity>}
+              </TouchableOpacity> }
               
             </View>
 
@@ -424,9 +533,9 @@ export default class HomeScreen extends Component {
                     mode="date"
                     locale="tr-TR"
                     maximumDate={today}
-                    onChange={  (event, date) => {
-                      
+                    onChange={(event, date) => {
 
+                      
                       this.formDay2(date);
                       
 
@@ -443,8 +552,10 @@ export default class HomeScreen extends Component {
                 mode="date"
                 locale="tr-TR"
                 maximumDate={today}
-                onChange={ (event,date) => {
-                    
+                onChange={(event, date) => {
+                  
+                  
+
                     this.formDay(date);
                 }}
               />
@@ -518,14 +629,12 @@ export default class HomeScreen extends Component {
                         renderItem={({ item }) => (
                           <TouchableOpacity
                             onPress={() =>
-                              
                               this._isMounted &&
                               this.setState({
                                 allDone: this.state.birth_date_name != "" &&  this.state.surname != "" && this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "",
                                 showCityPicker: false,
                                 city: item.title,
                               })
-                              
                             }
                             style={{
                               height: Dimensions.get("window").height / 25,
@@ -1002,10 +1111,10 @@ export default class HomeScreen extends Component {
                           <TouchableOpacity
                             onPress={() =>
                               this._isMounted &&
-                              this.setState({ 
+                              this.setState({
                                 showPCRPositiveModal: false,
                                 pcr_positive: item.title,
-                                allDone: this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" && this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" 
+                                allDone: this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" && this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != ""
                               })
                             }
                             style={{
@@ -1074,6 +1183,51 @@ export default class HomeScreen extends Component {
           </SafeAreaView>
         </ImageBackground>
       </TouchableOpacity>
-    );
+        
+      );
+    }
+    else{
+      return(
+        <View style = {styles.container}>
+          <Text style={styles.inputView}>
+            Name  {this.state.name}
+          </Text>
+          <Text style={styles.inputView}>
+            Surname  {this.state.surname}
+          </Text>
+          <Text style={styles.inputView}>
+            Birth Date  {this.state.birth_date_name}
+          </Text>
+          <Text style={styles.inputView}>
+            City  {this.state.city}
+          </Text>
+          <Text style={styles.inputView}>
+            Gender  {this.state.gender}
+          </Text>
+          <Text style={styles.inputView}>
+            Vaccine Type {this.state.vaccine_type}
+          </Text>
+          <Text style={styles.inputView}>
+            Side Effect {this.state.side_effect}
+          </Text>
+          <Text style={styles.inputView}>
+            PCR Positive {this.state.pcr_positive}
+          </Text>
+          <View style={styles.aralik}>
+            <TouchableOpacity style={styles.nextButtonLeft} onPress = {this.changeAnswer}>
+              <Text>Change Answer</Text>
+            </TouchableOpacity>
+            <View style={styles.bos} />
+            <TouchableOpacity style={styles.nextButtonRight} onPress = {this.thankYou} >
+              <Text>Submit Survey</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+        
+      
+          
   }
 }
+
