@@ -62,7 +62,7 @@ export default class HomeScreen extends Component {
       day:"",
       month:"",
       year:"",
-      pcr_positive: false,
+      pcr_positive: "",
       showVaccineTypeModal: false,
       showSideEffectModal: false,
       showDatePicker: false,
@@ -118,8 +118,7 @@ export default class HomeScreen extends Component {
     return new Date(splitArr[0], splitArr[1] - 1, splitArr[2]); // months are 0-based
   }
 
-  formDay =(date) =>
-  {
+  async formDay (date) {
     this.setState({
       birth_date:new Date(date),
         day: date.getDate().toString(),
@@ -130,8 +129,7 @@ export default class HomeScreen extends Component {
     });
   }
 
-  formDay2=(date) =>
-  {
+  async formDay2 (date) {
     this.setState({
       birth_date:new Date(date),
         day: date.getDate().toString(),
@@ -224,7 +222,6 @@ export default class HomeScreen extends Component {
                   onchange={(value) => {
                     this._isMounted && this.setState({ surname: value });
                   }}
-                  accessibilityLabel="surname"
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -233,13 +230,7 @@ export default class HomeScreen extends Component {
                   onpress={() => {
                     this._isMounted && this.setState({ showDatePicker: true });
                   }}
-                  value={
-                    Moment(this.state.birth_date).format("D MM Y") !=
-                    "Invalid date"
-                      ? Moment(this.state.birth_date).format("DD/MM/Y")
-                      : ""
-                  }
-                  accessibilityLabel="birthdate"
+                  value={ this.state.birth_date_name} 
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -248,8 +239,7 @@ export default class HomeScreen extends Component {
                   onpress={() => {
                     this._isMounted && this.setState({ showCityPicker: true });
                   }}
-                  value={this.state.city.title}
-                  accessibilityLabel="city"
+                  value={this.state.city}
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -259,8 +249,7 @@ export default class HomeScreen extends Component {
                     this._isMounted &&
                       this.setState({ showGenderPicker: true });
                   }}
-                  value={this.state.gender.title}
-                  accessibilityLabel="gender"
+                  value={this.state.gender}
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -270,8 +259,7 @@ export default class HomeScreen extends Component {
                     this._isMounted &&
                       this.setState({ showVaccineTypeModal: true });
                   }}
-                  value={this.state.vaccine_type.title}
-                  accessibilityLabel="vaccinetype"
+                  value={this.state.vaccine_type}
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -281,8 +269,7 @@ export default class HomeScreen extends Component {
                     this._isMounted &&
                       this.setState({ showSideEffectModal: true });
                   }}
-                  value={this.state.side_effect.title}
-                  accessibilityLabel="sideeffect"
+                  value={this.state.side_effect}
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -292,8 +279,7 @@ export default class HomeScreen extends Component {
                     this._isMounted &&
                       this.setState({ showPCRPositiveModal: true });
                   }}
-                  value={this.state.pcr_positive.title}
-                  accessibilityLabel="pcrpositive"
+                  value={this.state.pcr_positive}
                 />
                 
               </View>
@@ -449,7 +435,7 @@ export default class HomeScreen extends Component {
                 mode="date"
                 locale="tr-TR"
                 maximumDate={today}
-                onChange={(date) => {
+                onChange={(event, date) => {
                   
                   
 
