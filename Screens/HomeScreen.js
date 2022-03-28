@@ -17,6 +17,7 @@ import FormInput from "../Components/form-input";
 import DatePicker from "@react-native-community/datetimepicker";
 import FormInputClickable from "../Components/form-input-clickable";
 import Moment from "moment";
+import { Alert } from "react-native-web";
 
 const inputWidth = Dimensions.get("window").width * 0.9;
 const inputHeight = Dimensions.get("window").height * 0.06;
@@ -53,21 +54,53 @@ export default class HomeScreen extends Component {
       name: "",
       surname: "",
       birth_date: "",
+      birth_date_name: "",
       city: "",
       gender: "",
       vaccine_type: "",
       side_effect: "",
+      day:"",
+      month:"",
+      year:"",
       pcr_positive: false,
       showVaccineTypeModal: false,
       showSideEffectModal: false,
       showDatePicker: false,
-      allDone: false,
+      allDone: true,
       showCityPicker: false,
       showGenderPicker: false,
       showPCRPositiveModal: false,
     };
 
     this._isMounted = false;
+  }
+
+  validateName = () => {
+    const emailRegex = /[A-Z][a-zA-Z]*/;
+    if(emailRegex.test(this.state.name) && emailRegex.test(this.state.surname)){
+        return true;
+    }else{
+        return false;
+    }
+  }
+
+  submitSurvey = () =>
+  {   
+      if( this.state.name == "" || this.state.surname == "" || this.state.birth_date_name =="" || this.state.city == "" || this.state.gender == "" || this.state.vaccine_type == "" ||this.state.side_effect == "" || this.state.pcr_positive == "")
+      {
+        alert("All fields must be filled");
+        
+      }
+      else{
+        if( this.validateName())
+        {
+          alert("Your answer were submitted.");
+        }
+        else{
+          alert("Invalid name or surname");
+        }
+      }
+      
   }
 
   async componentDidMount() {
@@ -83,6 +116,29 @@ export default class HomeScreen extends Component {
     const splitArr = str.split("-");
     // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
     return new Date(splitArr[0], splitArr[1] - 1, splitArr[2]); // months are 0-based
+  }
+
+  formDay =(date) =>
+  {
+    this.setState({
+      birth_date:new Date(date),
+        day: date.getDate().toString(),
+        month: date.getMonth().toString(),
+        year: date.getFullYear().toString(),
+        showDatePicker: !this.state.showDatePicker,
+        birth_date_name : date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear()
+    });
+  }
+
+  formDay2=(date) =>
+  {
+    this.setState({
+      birth_date:new Date(date),
+        day: date.getDate().toString(),
+        month: date.getMonth().toString(),
+        year: date.getFullYear().toString(),
+        birth_date_name : date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear()
+    });
   }
 
   render() {
@@ -239,6 +295,7 @@ export default class HomeScreen extends Component {
                   value={this.state.pcr_positive.title}
                   accessibilityLabel="pcrpositive"
                 />
+                
               </View>
             </View>
             <View
@@ -249,15 +306,32 @@ export default class HomeScreen extends Component {
                 justifyContent: "space-evenly",
               }}
             >
-              <FormButton
-                width={inputWidth * 0.7}
-                height={inputHeight * 1.1}
+              <TouchableOpacity
                 disabled={this.state.allDone ? false : true}
-                backgroundcolor={
-                  this.state.allDone ? "rgba(0,0,0,0.8)" : "rgba(0,0,0,0.2)"
-                }
-                fontcolor={this.state.allDone ? "white" : "rgba(0,0,0,0.4)"}
-              />
+                style={{
+                  width: inputWidth * 0.7,
+                  height: inputHeight * 1.1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: this.state.allDone ? "rgba(0,0,0,0.8)" : "rgba(0,0,0,0.2)",
+                  borderRadius: Dimensions.get("window").height,
+                  
+                }}
+                onPress = {this.submitSurvey}
+              >
+                <Text
+                  adjustsFontSizeToFit
+                  numberOfLines={1}
+                  style={{
+                    color: this.state.allDone ? "white" : "rgba(0,0,0,0.4)",
+                    fontSize: Dimensions.get("window").width / 15,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Submit
+                </Text>
+              </TouchableOpacity>
+              
             </View>
 
             {Platform.OS === "ios" ? (
@@ -355,9 +429,14 @@ export default class HomeScreen extends Component {
                     }
                     mode="date"
                     locale="tr-TR"
-                    minimumDate={today}
+                    maximumDate={today}
                     onChange={(event, date) => {
-                      datePicked = date;
+
+                      
+                      this.formDay2(date);
+                      
+
+                      
                     }}
                   />
                 </SafeAreaView>
@@ -369,13 +448,12 @@ export default class HomeScreen extends Component {
                 value={this.state.birth_date ? this.state.birth_date : today}
                 mode="date"
                 locale="tr-TR"
-                minimumDate={today}
+                maximumDate={today}
                 onChange={(date) => {
-                  this._isMounted &&
-                    this.setState({
-                      birth_date: date,
-                      showDatePicker: !this.state.showDatePicker,
-                    });
+                  
+                  
+
+                    this.formDay(date);
                 }}
               />
             ) : null}
@@ -451,7 +529,7 @@ export default class HomeScreen extends Component {
                               this._isMounted &&
                               this.setState({
                                 showCityPicker: false,
-                                city: item,
+                                city: item.title,
                               })
                             }
                             style={{
@@ -571,7 +649,7 @@ export default class HomeScreen extends Component {
                               this._isMounted &&
                               this.setState({
                                 showGenderPicker: false,
-                                gender: item,
+                                gender: item.title,
                               })
                             }
                             style={{
@@ -690,7 +768,7 @@ export default class HomeScreen extends Component {
                               this._isMounted &&
                               this.setState({
                                 showVaccineTypeModal: false,
-                                vaccine_type: item,
+                                vaccine_type: item.title,
                               })
                             }
                             style={{
@@ -809,7 +887,7 @@ export default class HomeScreen extends Component {
                               this._isMounted &&
                               this.setState({
                                 showSideEffectModal: false,
-                                side_effect: item,
+                                side_effect: item.title
                               })
                             }
                             style={{
@@ -928,7 +1006,7 @@ export default class HomeScreen extends Component {
                               this._isMounted &&
                               this.setState({
                                 showPCRPositiveModal: false,
-                                pcr_positive: item,
+                                pcr_positive: item.title,
                               })
                             }
                             style={{
