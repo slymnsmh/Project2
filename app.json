@@ -16,17 +16,18 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.ardaakcabuyuk.Project2"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "ios": {
+      "bundleIdentifier": "com.ardaakcabuyuk.Project2"
     }
   }
 }
