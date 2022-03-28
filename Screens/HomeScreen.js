@@ -66,7 +66,7 @@ export default class HomeScreen extends Component {
       showVaccineTypeModal: false,
       showSideEffectModal: false,
       showDatePicker: false,
-      allDone: true,
+      allDone: false,
       showCityPicker: false,
       showGenderPicker: false,
       showPCRPositiveModal: false,
@@ -88,8 +88,7 @@ export default class HomeScreen extends Component {
   {   
       if( this.state.name == "" || this.state.surname == "" || this.state.birth_date_name =="" || this.state.city == "" || this.state.gender == "" || this.state.vaccine_type == "" ||this.state.side_effect == "" || this.state.pcr_positive == "")
       {
-        alert("All fields must be filled");
-        
+        alert("All fields must be filled");    
       }
       else{
         if( this.validateName())
@@ -118,7 +117,8 @@ export default class HomeScreen extends Component {
     return new Date(splitArr[0], splitArr[1] - 1, splitArr[2]); // months are 0-based
   }
 
-  async formDay (date) {
+  async formDay (date) 
+  {
     this.setState({
       birth_date:new Date(date),
         day: date.getDate().toString(),
@@ -129,7 +129,8 @@ export default class HomeScreen extends Component {
     });
   }
 
-  async formDay2 (date) {
+  async formDay2(date) 
+  {
     this.setState({
       birth_date:new Date(date),
         day: date.getDate().toString(),
@@ -210,9 +211,11 @@ export default class HomeScreen extends Component {
                   placeholder="Name"
                   value={this.state.name}
                   onchange={(value) => {
-                    this._isMounted && this.setState({ name: value });
+                    this._isMounted && this.setState({ 
+                      name: value,
+                      allDone: value != "" && this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" &&  this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "", 
+                    });
                   }}
-                  accessibilityLabel="name"
                 />
                 <FormInput
                   width={inputWidth}
@@ -220,7 +223,10 @@ export default class HomeScreen extends Component {
                   placeholder="Surname"
                   value={this.state.surname}
                   onchange={(value) => {
-                    this._isMounted && this.setState({ surname: value });
+                    this._isMounted && this.setState({ 
+                      allDone: value != "" && this.state.birth_date_name != "" && this.state.city != "" &&  this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "",
+                      surname: value 
+                    });
                   }}
                 />
                 <FormInputClickable
@@ -293,8 +299,9 @@ export default class HomeScreen extends Component {
                 justifyContent: "space-evenly",
               }}
             >
+              {this.state.allDone && 
               <TouchableOpacity
-                disabled={this.state.allDone ? false : true}
+    
                 style={{
                   width: inputWidth * 0.7,
                   height: inputHeight * 1.1,
@@ -317,7 +324,7 @@ export default class HomeScreen extends Component {
                 >
                   Submit
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity>}
               
             </View>
 
@@ -379,6 +386,7 @@ export default class HomeScreen extends Component {
                         if (datePicked != null) {
                           this._isMounted &&
                             this.setState({
+                              allDone:  this.state.city != "" && this.state.surname != "" && this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "",
                               birth_date: datePicked,
                               showDatePicker: false,
                             });
@@ -417,9 +425,9 @@ export default class HomeScreen extends Component {
                     mode="date"
                     locale="tr-TR"
                     maximumDate={today}
-                    onChange={(event, date) => {
-
+                    onChange={  (event, date) => {
                       
+
                       this.formDay2(date);
                       
 
@@ -436,10 +444,8 @@ export default class HomeScreen extends Component {
                 mode="date"
                 locale="tr-TR"
                 maximumDate={today}
-                onChange={(event, date) => {
-                  
-                  
-
+                onChange={ (event,date) => {
+                    
                     this.formDay(date);
                 }}
               />
@@ -513,11 +519,14 @@ export default class HomeScreen extends Component {
                         renderItem={({ item }) => (
                           <TouchableOpacity
                             onPress={() =>
+                              
                               this._isMounted &&
                               this.setState({
+                                allDone: this.state.birth_date_name != "" &&  this.state.surname != "" && this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "",
                                 showCityPicker: false,
                                 city: item.title,
                               })
+                              
                             }
                             style={{
                               height: Dimensions.get("window").height / 25,
@@ -635,6 +644,7 @@ export default class HomeScreen extends Component {
                             onPress={() =>
                               this._isMounted &&
                               this.setState({
+                                allDone: this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" && this.state.name != "" && this.state.vaccine_type != "" && this.state.side_effect != "" && this.state.pcr_positive != "",
                                 showGenderPicker: false,
                                 gender: item.title,
                               })
@@ -754,6 +764,7 @@ export default class HomeScreen extends Component {
                             onPress={() =>
                               this._isMounted &&
                               this.setState({
+                                allDone: this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" && this.state.name != "" && this.state.gender != "" &&  this.state.side_effect != "" && this.state.pcr_positive != "",
                                 showVaccineTypeModal: false,
                                 vaccine_type: item.title,
                               })
@@ -873,6 +884,7 @@ export default class HomeScreen extends Component {
                             onPress={() =>
                               this._isMounted &&
                               this.setState({
+                                allDone: this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" && this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" &&  this.state.pcr_positive != "",
                                 showSideEffectModal: false,
                                 side_effect: item.title
                               })
@@ -991,9 +1003,10 @@ export default class HomeScreen extends Component {
                           <TouchableOpacity
                             onPress={() =>
                               this._isMounted &&
-                              this.setState({
+                              this.setState({ 
                                 showPCRPositiveModal: false,
                                 pcr_positive: item.title,
+                                allDone: this.state.birth_date_name != "" && this.state.city != "" && this.state.surname != "" && this.state.name != "" && this.state.gender != "" && this.state.vaccine_type != "" && this.state.side_effect != "" 
                               })
                             }
                             style={{
