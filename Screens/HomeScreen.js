@@ -158,6 +158,7 @@ export default class HomeScreen extends Component {
                   onchange={(value) => {
                     this._isMounted && this.setState({ name: value });
                   }}
+                  accessibilityLabel="name"
                 />
                 <FormInput
                   width={inputWidth}
@@ -167,6 +168,7 @@ export default class HomeScreen extends Component {
                   onchange={(value) => {
                     this._isMounted && this.setState({ surname: value });
                   }}
+                  accessibilityLabel="surname"
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -181,6 +183,7 @@ export default class HomeScreen extends Component {
                       ? Moment(this.state.birth_date).format("DD/MM/Y")
                       : ""
                   }
+                  accessibilityLabel="birthdate"
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -190,6 +193,7 @@ export default class HomeScreen extends Component {
                     this._isMounted && this.setState({ showCityPicker: true });
                   }}
                   value={this.state.city.title}
+                  accessibilityLabel="city"
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -200,6 +204,7 @@ export default class HomeScreen extends Component {
                       this.setState({ showGenderPicker: true });
                   }}
                   value={this.state.gender.title}
+                  accessibilityLabel="gender"
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -210,6 +215,7 @@ export default class HomeScreen extends Component {
                       this.setState({ showVaccineTypeModal: true });
                   }}
                   value={this.state.vaccine_type.title}
+                  accessibilityLabel="vaccinetype"
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -220,6 +226,7 @@ export default class HomeScreen extends Component {
                       this.setState({ showSideEffectModal: true });
                   }}
                   value={this.state.side_effect.title}
+                  accessibilityLabel="sideeffect"
                 />
                 <FormInputClickable
                   width={inputWidth}
@@ -230,6 +237,7 @@ export default class HomeScreen extends Component {
                       this.setState({ showPCRPositiveModal: true });
                   }}
                   value={this.state.pcr_positive.title}
+                  accessibilityLabel="pcrpositive"
                 />
               </View>
             </View>
