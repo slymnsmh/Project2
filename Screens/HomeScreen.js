@@ -230,7 +230,8 @@ export default class HomeScreen extends Component {
                   onpress={() => {
                     this._isMounted && this.setState({ showDatePicker: true });
                   }}
-                  value={ this.state.birth_date_name} 
+                  value={ this.state.birth_date_name}
+                  accessibilityLabel="date"
                 />
                 <FormInputClickable
                   width={inputWidth}
