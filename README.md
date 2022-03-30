@@ -7,6 +7,7 @@
 - Follow the instructions on the terminal. You might need to run @npx react-native-community/cli doctor.
 - Run npx jetify
 - Run npm run android when the emulator is up.
+- Go to https://github.com/ardaakcabuyuk/appium-test-automation, and clone the project.
 - Install the mvn dependencies and change the related fields with your emulator settings on Main.java, with the IDE of your choice (intelliJ is recommended), and run it.
 - If everything is set up correctly, the appium server should be able to automate the app.
 - The console displays whether or not a case has failed.
